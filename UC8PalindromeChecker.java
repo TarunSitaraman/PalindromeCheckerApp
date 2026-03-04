@@ -1,10 +1,10 @@
 
-class Node {
+class UC8_Node {
 
     char data;
-    Node next;
+    UC8_Node next;
 
-    Node(char data) {
+    UC8_Node(char data) {
         this.data = data;
         this.next = null;
     }
@@ -12,43 +12,44 @@ class Node {
 
 public class UC8PalindromeChecker {
 
-    // Main function to check if the linked list is a palindrome
-    public static boolean isPalindrome(Node head) {
+    public static boolean isPalindrome(UC8_Node head) {
         if (head == null || head.next == null) {
             return true;
         }
 
-        // 1. Find the middle of the linked list
-        Node slow = head;
-        Node fast = head;
+        UC8_Node slow = head;
+        UC8_Node fast = head;
         while (fast != null && fast.next != null) {
             slow = slow.next;
             fast = fast.next.next;
         }
 
-        // 2. Reverse the second half of the list
-        Node secondHalfHead = reverseList(slow);
-        Node firstHalfHead = head;
+        UC8_Node secondHalfHead = reverse(slow);
+        UC8_Node firstHalfHead = head;
 
-        // 3. Compare the two halves
-        Node tempReversed = secondHalfHead; // Keep track to restore if needed
-        while (secondHalfHead != null) {
-            if (firstHalfHead.data != secondHalfHead.data) {
-                return false;
+        UC8_Node p1 = firstHalfHead;
+        UC8_Node p2 = secondHalfHead;
+        boolean result = true;
+
+        while (p2 != null) {
+            if (p1.data != p2.data) {
+                result = false;
+                break;
             }
-            firstHalfHead = firstHalfHead.next;
-            secondHalfHead = secondHalfHead.next;
+            p1 = p1.next;
+            p2 = p2.next;
         }
 
-        return true;
+        reverse(secondHalfHead);
+
+        return result;
     }
 
-    // Helper: In-place Reversal
-    private static Node reverseList(Node head) {
-        Node prev = null;
-        Node current = head;
+    private static UC8_Node reverse(UC8_Node head) {
+        UC8_Node prev = null;
+        UC8_Node current = head;
         while (current != null) {
-            Node nextNode = current.next;
+            UC8_Node nextNode = current.next;
             current.next = prev;
             prev = current;
             current = nextNode;
@@ -56,29 +57,27 @@ public class UC8PalindromeChecker {
         return prev;
     }
 
-    // Utility: Convert string to Linked List
-    public static Node stringToList(String s) {
-        if (s.isEmpty()) {
+    public static UC8_Node buildList(String str) {
+        if (str.isEmpty()) {
             return null;
         }
-        Node head = new Node(s.charAt(0));
-        Node current = head;
-        for (int i = 1; i < s.length(); i++) {
-            current.next = new Node(s.charAt(i));
-            current.next.prev = current; // For visualization, but this is a Singly LL
+        UC8_Node head = new UC8_Node(str.charAt(0));
+        UC8_Node current = head;
+        for (int i = 1; i < str.length(); i++) {
+            current.next = new UC8_Node(str.charAt(i));
             current = current.next;
         }
         return head;
     }
 
     public static void main(String[] args) {
-        String input = "RADAR";
-        Node head = stringToList(input);
+        String testInput = "radar";
+        UC8_Node listHead = buildList(testInput);
 
-        if (isPalindrome(head)) {
-            System.out.println("\"" + input + "\" is a palindrome.");
+        if (isPalindrome(listHead)) {
+            System.out.println("True");
         } else {
-            System.out.println("\"" + input + "\" is not a palindrome.");
+            System.out.println("False");
         }
     }
 }
